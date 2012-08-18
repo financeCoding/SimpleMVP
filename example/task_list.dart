@@ -83,18 +83,12 @@ class TasksView extends smvc.View{
   _buildViews() => model.map((t) => new TaskView(t, new Element.tag("li")));
 }
 
-
-//
-//add ajax calls updating the model
-
 void main() {
   var tasks = new Tasks();
+  var newTaskView = new NewTaskView(tasks, new Element.tag("div"));
+  var tasksView = new TasksView(tasks, new Element.tag("div"));
   
-
-  var nt = new NewTaskView(tasks, new Element.tag("div"));
-  var v = new TasksView(tasks, new Element.tag("div"));
-  query("#container").elements.add(nt.render().el);
-  query("#container").elements.add(v.render().el);
+  query("#container").elements.addAll([newTaskView.render().el, tasksView.render().el]);
   
   tasks.fetch();
 }

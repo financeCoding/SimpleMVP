@@ -1,5 +1,6 @@
 #import("dart:io");
 #import("dart:json");
+#import("dart:math");
 
 final HOST = "127.0.0.1";
 final PORT = 8080;
@@ -21,26 +22,40 @@ class RequestHandler {
   
   void process() {
     var uri = request.uri;
-    
-    print("${request.method} ${uri} : ${request.inputStream.read()}");
-    
-    if(uri.startsWith("/api/tasks")){
+    print("${request.method} ${uri}");
+      
+    if (uri.startsWith("/api/tasks") && request.method == "GET"){
       _render("text/json", _items());
 
+    } else if (uri.startsWith("/api/tasks") && request.method == "POST"){
+      _renderNewRecord();
+
     } else if (uri.startsWith("/api/task")){
-      _render("text/json", _nextItem());
-        
+      _render("text/json", {});
+          
     } else if (uri.endsWith(".dart")) {
       _renderDartFile();
-      
+        
     } else if (uri.endsWith(".css")){
       var file = new File("example/${_filename(uri)}");
       _render("text/css", file.readAsTextSync());
-
+  
     } else if (uri.endsWith(".html")){
       var file = new File("example/${_filename(uri)}");
       _render("text/html", file.readAsTextSync());
     }
+  }
+  
+  _renderNewRecord(){
+    var s = new StringInputStream(request.inputStream);
+    s.onData = (){
+      var data = s.read();
+      print("body: ${data}");
+      
+      var map = JSON.parse(data);
+      map["id"] = new Random().nextInt(10000);
+      _render("text/json", JSON.stringify(map));
+    };    
   }
   
   _renderDartFile(){
@@ -68,12 +83,4 @@ class RequestHandler {
     var r = [{"id": 1, "text": "Task 1"}, {"id": 2, "text": "Task 2"}];
     return JSON.stringify(r);
   }
-
-  _nextItem() {
-    var r = [{"id": 1, "text": "Task 1"}];
-    return JSON.stringify(r);
-  }
-  
-  //log all parameters
-  //implement "DELETE" "PUT" "POST"
 }
