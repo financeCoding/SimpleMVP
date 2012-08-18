@@ -43,13 +43,6 @@ class CollectionRemoveEvent {
   CollectionRemoveEvent(this.collection, this.model);
 }
 
-class CollectionUpdateEvent {
-  final collection, oldModel, newModel;
-  final num index;
-  
-  CollectionUpdateEvent(this.collection, this.oldModel, this.newModel, this.index);
-}
-
 class ModelEvents {
   final Listeners change;
   

@@ -2,14 +2,16 @@
 #import("../lib/simple_mvc.dart", prefix: "smvc");
 
 class Tasks extends smvc.ModelList<Task>{
-  rootUrl() => "/tasks.json";
+  final rootUrl = "/api/tasks";
   makeInstance(attrs, tasks) => new Task(attrs, tasks);
 }
 
 class Task extends smvc.Model {
   Task(attrs, models): super(attrs, models);
   Task.withText(String text): this({"text": text}, null);
-  rootUrl() => "/api/task";
+  
+  final rootUrl = "/api/task";
+  final createUrl = "/api/tasks";
 }
 
 
@@ -41,7 +43,7 @@ class TaskView extends smvc.View {
   }
   
   _onDelete(event){
-    model.modelList.remove(model);
+    model.destroy();
   }
 }
 
@@ -54,7 +56,9 @@ class NewTaskView extends smvc.View {
 
   _addNewTask(event){
     var text = el.query("#task-text").value;
-    model.add(new Task.withText(text));
+    var task = new Task.withText(text);
+    model.add(task);
+    task.save();
   } 
 }
 

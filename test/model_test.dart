@@ -1,13 +1,6 @@
-#import("../lib/simple_mvc.dart");
-#import("../packages/unittest/unittest.dart");
-
-class TestModel extends Model {
-  TestModel(attrs, [list]): super(attrs, list);
-  rootUrl() => "url";
-}
-
-main(){  
-
+testModels(){  
+  var capturer = new EventCapturer();
+  
   group("isSaved", (){
     test("is true when id is set", (){
       var m = new TestModel({"id": 1});
@@ -54,16 +47,47 @@ main(){
         expect(() => m.invalid = "value", throws);    
       });
       
-      test("dispatches an event", (){
-        var event;
-        m.on.change.add((e){
-          event = e;
-        });
+      test("raises an event", (){
+        m.on.change.add(capturer.callback);
         m.key = "newValue";
         
-        expect(event.attrName, equals("key"));
-        expect(event.oldValue, equals("value"));
-        expect(event.newValue, equals("newValue"));
+        expect(capturer.event.attrName, equals("key"));
+        expect(capturer.event.oldValue, equals("value"));
+        expect(capturer.event.newValue, equals("newValue"));
+      });
+    });
+    
+    group("save", (){
+      test("sumbits changes to the server when updates", (){ 
+        var m = new TestModel({"id": 1, "key": "value"});
+        m.save();
+        m.server.getLogs(callsTo('submit', "put", "url/1", m.attributes)).verify(happenedExactly(1));     
+      });
+      
+      test("sumbits changes to the server when create", (){ 
+        var m = new TestModel({"key": "value"});
+        m.save();
+        m.server.getLogs(callsTo('submit', "post", "url", m.attributes)).verify(happenedExactly(1));     
+      });
+    });
+
+    group("destroy", (){
+      var m, list;
+      
+      setUp((){
+        m = new TestModel({"id": 1});
+        list = new TestModelList();
+      });
+      
+      test("sumbits changes to the server", (){ 
+        m.destroy();
+        m.server.getLogs(callsTo('submit', "delete", "url/1", {})).verify(happenedExactly(1));
+      });
+      
+      test("removes itself from the model list", (){
+        list.add(m);
+        m.destroy();
+        expect(list.models, equals([]));
       });
     });
   });

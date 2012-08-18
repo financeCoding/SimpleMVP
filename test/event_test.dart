@@ -1,8 +1,4 @@
-#import("../lib/simple_mvc.dart");
-#import("../packages/unittest/unittest.dart");
-
-main(){  
-
+testEvents(){  
   group("Listeners", (){
     test("adds listeners", (){
       var l = new Listeners();

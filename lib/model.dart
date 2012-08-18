@@ -2,17 +2,35 @@ class Model {
   Map attributes;
   ModelList modelList;
   final ModelEvents on;
+  Server server;
 
   Model(this.attributes, [this.modelList]):
-    on = new ModelEvents();
+    on = new ModelEvents(),
+    server = new Server();
   
-  abstract String rootUrl();
+  abstract String get rootUrl();
+  String get createUrl() => rootUrl;
+  String get updateUrl() => "${rootUrl}/$id";
+  String get destroyUrl() => "${rootUrl}/$id";
   
-//  String getUrl() => isSaved() ? "$rootUrl()/$id" : rootUrl();
-
   get id() => attributes["id"];
   
   bool isSaved() => id != null;
+  
+  void save(){
+    var method = isSaved() ? "put" : "post";
+    var url = isSaved() ? updateUrl : createUrl;
+    server.submit(method, url, attributes, (attrs){
+      attributes = attrs;
+    });
+  }
+  
+  void destroy(){
+    if(isSaved())
+      server.submit("delete", destroyUrl, {});
+    if(modelList != null)
+      modelList.remove(this);
+  }
   
   getAttr(String name) => attributes[name];
 
