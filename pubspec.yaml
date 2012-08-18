@@ -1,3 +1,8 @@
+name: simple_mvc
+version: 0.0.1
+description: >
+  A simple mvc framework inspired by Backbone.js. The example folder contains a task list app.
+  README contains a brief overview of all the featues of the project. 
 dependencies:
   unittest:
     sdk: unittest
