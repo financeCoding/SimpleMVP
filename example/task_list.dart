@@ -1,5 +1,5 @@
 #import('dart:html');
-#import("../lib/simple_mvc.dart", prefix: "smvc");
+#import("../simple_mvc.dart", prefix: "smvc");
 
 class Tasks extends smvc.ModelList<Task>{
   final rootUrl = "/api/tasks";
