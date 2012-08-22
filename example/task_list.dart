@@ -35,8 +35,8 @@ taskListTemplate(c) => """
 
 
 
-class TaskView extends smvc.View {
-  TaskView(task, el) : super(task, el, oneTaskTemplate);
+class TaskPresenter extends smvc.Presenter {
+  TaskPresenter(task, el) : super(task, el, oneTaskTemplate);
   
   subscribeToHtmlEvents(){
     el.query("a.delete").on.click.add(_onDelete); 
@@ -47,8 +47,8 @@ class TaskView extends smvc.View {
   }
 }
 
-class NewTaskView extends smvc.View {
-  NewTaskView(tasks, el) : super(tasks, el, newTaskTemplate);
+class NewTaskPresenter extends smvc.Presenter {
+  NewTaskPresenter(tasks, el) : super(tasks, el, newTaskTemplate);
 
   subscribeToHtmlEvents(){
     el.query("#create-task").on.click.add(_addNewTask); 
@@ -62,8 +62,8 @@ class NewTaskView extends smvc.View {
   } 
 }
 
-class TasksView extends smvc.View{
-  TasksView(tasks, el) : super(tasks, el, taskListTemplate);
+class TasksPresenter extends smvc.Presenter{
+  TasksPresenter(tasks, el) : super(tasks, el, taskListTemplate);
  
   subscribeToModelEvents(){
     model.on.load.add(_rerenderTasks);
@@ -75,20 +75,20 @@ class TasksView extends smvc.View{
     var t = el.query("#tasks");
     t.elements.clear();
     
-    _buildViews().forEach((v){
+    _buildPresenters().forEach((v){
       t.elements.add(v.render().el);
     });
   }
   
-  _buildViews() => model.map((t) => new TaskView(t, new Element.tag("li")));
+  _buildPresenters() => model.map((t) => new TaskPresenter(t, new Element.tag("li")));
 }
 
-void main() {
+main() {
   var tasks = new Tasks();
-  var newTaskView = new NewTaskView(tasks, new Element.tag("div"));
-  var tasksView = new TasksView(tasks, new Element.tag("div"));
+  var newTaskPresenter = new NewTaskPresenter(tasks, new Element.tag("div"));
+  var tasksPresenter = new TasksPresenter(tasks, new Element.tag("div"));
   
-  query("#container").elements.addAll([newTaskView.render().el, tasksView.render().el]);
-  
+  query("#container").elements.addAll([newTaskPresenter.render().el, tasksPresenter.render().el]);
+
   tasks.fetch();
 }

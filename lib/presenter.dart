@@ -1,15 +1,15 @@
 typedef String Template<T>(T model);
 
-class View<T> {
+class Presenter<T> {
   final HtmlElement el;
   final Template<T> template;
   final T model;
   
-  View(this.model, this.el, [this.template]){
+  TaskPresenter(this.model, this.el, [this.template]){
     subscribeToModelEvents(); 
   }
   
-  View<T> render(){
+  Presenter<T> render(){
     if(template != null){
       el.innerHTML = template(model);
     }

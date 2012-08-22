@@ -6,7 +6,7 @@ testEvents(){
       expect(l.listeners, equals(["listener1", "listener2"]));
     });
     
-    test("dispatches eents", (){
+    test("dispatches events", (){
       var l = new Listeners();
       var actualEvent;
       l.add((e) => actualEvent = e);
