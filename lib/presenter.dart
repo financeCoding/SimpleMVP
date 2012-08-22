@@ -5,7 +5,7 @@ class Presenter<T> {
   final Template<T> template;
   final T model;
   
-  TaskPresenter(this.model, this.el, [this.template]){
+  Presenter(this.model, this.el, [this.template]){
     subscribeToModelEvents(); 
   }
   

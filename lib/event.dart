@@ -15,14 +15,23 @@ class Listeners {
   }
 }
 
-class CollectionEvents {
-  final Listeners load, insert, remove, update;
-  
-  CollectionEvents(): 
-    load = new Listeners(), 
-    insert = new Listeners(),
-    remove = new Listeners(),
-    update = new Listeners();
+class Events {
+  final _listeners;
+
+  Events():
+    _listeners = new Map();
+
+  Listeners listeners(String eventType){
+    _listeners.putIfAbsent(eventType, () => new Listeners());
+    return _listeners[eventType];
+  }
+}
+
+class CollectionEvents extends Events {
+  Listeners get load() => listeners("load");
+  Listeners get insert() => listeners("insert");
+  Listeners get remove() => listeners("remove");
+  Listeners get update() => listeners("update");
 }
 
 class CollectionLoadEvent {
@@ -43,11 +52,8 @@ class CollectionRemoveEvent {
   CollectionRemoveEvent(this.collection, this.model);
 }
 
-class ModelEvents {
-  final Listeners change;
-  
-  ModelEvents():
-    change = new Listeners();
+class ModelEvents extends Events {
+  Listeners get change() => listeners("change");
 }
 
 class ChangeEvent {

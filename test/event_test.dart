@@ -15,4 +15,17 @@ testEvents(){
       expect(actualEvent, equals("expected event"));
     });
   });
+
+  group("events", (){
+    test("returns a list of listeners for the given event type", (){
+      var e = new Events();
+      e.listeners("type1").add("handler");
+      expect(e.listeners("type1").listeners, equals(["handler"]));
+    });
+
+    test("returns a new list for every given type", (){
+      var e = new Events();
+      expect(e.listeners("type1"), isNot(equals(e.listeners("type2"))));
+    });
+  });
 }
