@@ -23,8 +23,8 @@ oneTaskTemplate(c) => """
 """;
 
 newTaskTemplate(c) => """
-   <input type="text" id="task-text"/>
-   <button id="create-task">Create!</button> 
+   <input type="text" class="task-text"/>
+   <button>Create!</button>
 """;
 
 taskListTemplate(c) => """
@@ -35,35 +35,42 @@ taskListTemplate(c) => """
 
 
 
-class TaskPresenter extends smvc.Presenter {
+class TaskPresenter extends smvc.Presenter<Task> {
   TaskPresenter(task, el) : super(task, el, oneTaskTemplate);
-  
-  subscribeToHtmlEvents(){
-    el.query("a.delete").on.click.add(_onDelete); 
-  }
-  
+
+  get events() => {
+    "click a.delete": _onDelete
+  };
+
   _onDelete(event){
     model.destroy();
   }
 }
 
-class NewTaskPresenter extends smvc.Presenter {
-  NewTaskPresenter(tasks, el) : super(tasks, el, newTaskTemplate);
+class NewTaskPresenter extends smvc.Presenter<Tasks> {
+  NewTaskPresenter(tasks, el) :super(tasks, el, newTaskTemplate);
 
-  subscribeToHtmlEvents(){
-    el.query("#create-task").on.click.add(_addNewTask); 
-  }
+  get events() => {
+    "click button": _addNewTask
+  };
 
   _addNewTask(event){
-    var text = el.query("#task-text").value;
+    var textField = el.query(".task-text");
+    _createTask(textField.value);
+    textField.value = "";
+  }
+
+  _createTask(text){
     var task = new Task.withText(text);
     model.add(task);
     task.save();
-  } 
+  }
 }
 
-class TasksPresenter extends smvc.Presenter{
-  TasksPresenter(tasks, el) : super(tasks, el, taskListTemplate);
+class TasksPresenter extends smvc.Presenter<Tasks>{
+  TasksPresenter(tasks, el) : super(tasks, el, taskListTemplate){
+    model.fetch();
+  }
  
   subscribeToModelEvents(){
     model.on.load.add(_rerenderTasks);
@@ -89,6 +96,4 @@ main() {
   var tasksPresenter = new TasksPresenter(tasks, new Element.tag("div"));
   
   query("#container").elements.addAll([newTaskPresenter.render().el, tasksPresenter.render().el]);
-
-  tasks.fetch();
 }

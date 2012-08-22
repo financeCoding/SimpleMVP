@@ -15,10 +15,10 @@ class Listeners {
   }
 }
 
-class Events {
+class EventMap {
   final _listeners;
 
-  Events():
+  EventMap():
     _listeners = new Map();
 
   Listeners listeners(String eventType){
@@ -27,7 +27,7 @@ class Events {
   }
 }
 
-class CollectionEvents extends Events {
+class CollectionEvents extends EventMap {
   Listeners get load() => listeners("load");
   Listeners get insert() => listeners("insert");
   Listeners get remove() => listeners("remove");
@@ -52,7 +52,7 @@ class CollectionRemoveEvent {
   CollectionRemoveEvent(this.collection, this.model);
 }
 
-class ModelEvents extends Events {
+class ModelEvents extends EventMap {
   Listeners get change() => listeners("change");
 }
 

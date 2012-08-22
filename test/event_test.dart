@@ -18,13 +18,13 @@ testEvents(){
 
   group("events", (){
     test("returns a list of listeners for the given event type", (){
-      var e = new Events();
+      var e = new EventMap();
       e.listeners("type1").add("handler");
       expect(e.listeners("type1").listeners, equals(["handler"]));
     });
 
     test("returns a new list for every given type", (){
-      var e = new Events();
+      var e = new EventMap();
       expect(e.listeners("type1"), isNot(equals(e.listeners("type2"))));
     });
   });
