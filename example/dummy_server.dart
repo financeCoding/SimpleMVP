@@ -31,7 +31,7 @@ class RequestHandler {
       _renderNewRecord();
 
     } else if (uri.startsWith("/api/task")){
-      _render("text/json", {});
+      _render("text/json", "");
           
     } else if (uri.endsWith(".dart")) {
       _renderDartFile();
