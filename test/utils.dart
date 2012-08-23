@@ -6,11 +6,11 @@ class EventCapturer {
   }
 }
 
-class FakeServer extends Mock implements Server{}
+class MockStorage extends Mock implements Storage {}
 
 class TestModel extends Model {
   TestModel(attrs, [list]): super(attrs, list) {
-    server = new FakeServer();  
+    storage = new MockStorage();
   }
   
   final rootUrl = "url";
@@ -18,7 +18,7 @@ class TestModel extends Model {
 
 class TestModelList extends ModelList<TestModel> {
   TestModelList(){
-    server = new FakeServer();
+    storage = new MockStorage();
   }
 
   final rootUrl = "url";

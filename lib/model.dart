@@ -2,11 +2,14 @@ class Model {
   Map attributes;
   ModelList modelList;
   final ModelEvents on;
-  Server server;
+  Storage storage;
 
   Model(this.attributes, [this.modelList]):
-    on = new ModelEvents(),
-    server = new Server();
+    on = new ModelEvents(){
+
+    storage = new Storage({"read" : rootUrl, "create" : createUrl,
+        "update" : updateUrl, "destroy" : destroyUrl});
+  }
   
   abstract String get rootUrl();
   String get createUrl() => rootUrl;
@@ -18,18 +21,17 @@ class Model {
   bool isSaved() => id != null;
   
   void save(){
-    var method = isSaved() ? "put" : "post";
-    var url = isSaved() ? updateUrl : createUrl;
-    server.submit(method, url, attributes, (attrs){
-      attributes = attrs;
-    });
+    var f = isSaved() ? storage.update(attributes) : storage.create(attributes);
+    f.then((attrs) => attributes = attrs);
   }
   
   void destroy(){
-    if(isSaved())
-      server.submit("delete", destroyUrl, {});
-    if(modelList != null)
+    if(isSaved()){
+      storage.destroy(id);
+    }
+    if(modelList != null){
       modelList.remove(this);
+    }
   }
   
   getAttr(String name) => attributes[name];

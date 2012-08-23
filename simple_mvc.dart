@@ -4,7 +4,7 @@
 #import("dart:json");
 
 #source("lib/delegated_event.dart");
-#source("lib/server.dart");
+#source('lib/storage.dart');
 #source("lib/event.dart");
 #source("lib/model_list.dart");
 #source("lib/model.dart");

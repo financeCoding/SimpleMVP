@@ -58,16 +58,18 @@ testModels(){
     });
     
     group("save", (){
-      test("sumbits changes to the server when updates", (){ 
+      var dummyFuture = new Future.immediate("value");
+
+      test("updates the element in the storage", (){
         var m = new TestModel({"id": 1, "key": "value"});
+        m.storage.when(callsTo('update', m.attributes)).alwaysReturn(dummyFuture);
         m.save();
-        m.server.getLogs(callsTo('submit', "put", "url/1", m.attributes)).verify(happenedExactly(1));     
       });
       
-      test("sumbits changes to the server when create", (){ 
+      test("creates the element in the storage", (){
         var m = new TestModel({"key": "value"});
+        m.storage.when(callsTo('create', m.attributes)).alwaysReturn(dummyFuture);
         m.save();
-        m.server.getLogs(callsTo('submit', "post", "url", m.attributes)).verify(happenedExactly(1));     
       });
     });
 
@@ -79,9 +81,9 @@ testModels(){
         list = new TestModelList();
       });
       
-      test("sumbits changes to the server", (){ 
+      test("removes the element from the storage", (){
         m.destroy();
-        m.server.getLogs(callsTo('submit', "delete", "url/1", {})).verify(happenedExactly(1));
+        m.storage.getLogs(callsTo('destroy', 1)).verify(happenedExactly(1));
       });
       
       test("removes itself from the model list", (){

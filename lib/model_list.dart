@@ -1,13 +1,15 @@
 class ModelList<T> {
   final CollectionEvents on;
   List<T> models;
-  Server server;
+  Storage storage;
   
   ModelList():
     on = new CollectionEvents(),
-    server = new Server(),
-    models = [];
-  
+    models = []{
+
+    storage = new Storage({"readAll" : rootUrl});
+  }
+
   abstract String get rootUrl();
   
   abstract T makeInstance(Map attrs, ModelList list);
@@ -36,6 +38,6 @@ class ModelList<T> {
   }
  
   void fetch(){
-    server.submit("get", rootUrl, null, reset);
+    storage.readAll().then(reset);
   }
 }
