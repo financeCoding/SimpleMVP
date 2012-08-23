@@ -1,8 +1,7 @@
-name: simple_mvc
+name: simple_mvp
 version: 0.0.1
 description: >
-  A simple mvc framework inspired by Backbone.js. The example folder contains a task list app.
-  README contains a brief overview of all the featues of the project. 
+  SimpleMVP is a framework for writing single-page applications in Dart.
 dependencies:
   unittest:
     sdk: unittest
