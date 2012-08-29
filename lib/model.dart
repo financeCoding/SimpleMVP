@@ -12,16 +12,16 @@ class Model {
   }
   
   abstract String get rootUrl();
-  String get createUrl() => rootUrl;
-  String get updateUrl() => "${rootUrl}/$id";
-  String get destroyUrl() => "${rootUrl}/$id";
+  String get createUrl => rootUrl;
+  String get updateUrl => rootUrl;
+  String get destroyUrl => rootUrl;
   
-  get id() => attributes["id"];
+  get id => attributes["id"];
   
   bool isSaved() => id != null;
   
   void save(){
-    var f = isSaved() ? storage.update(attributes) : storage.create(attributes);
+    var f = isSaved() ? storage.update(id, attributes) : storage.create(attributes);
     f.then((attrs) => attributes = attrs);
   }
   

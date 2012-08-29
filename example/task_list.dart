@@ -38,7 +38,7 @@ taskListTemplate(c) => """
 class TaskPresenter extends smvc.Presenter<Task> {
   TaskPresenter(task, el) : super(task, el, oneTaskTemplate);
 
-  get events() => {
+  get events => {
     "click a.delete": _onDelete
   };
 
@@ -50,7 +50,7 @@ class TaskPresenter extends smvc.Presenter<Task> {
 class NewTaskPresenter extends smvc.Presenter<Tasks> {
   NewTaskPresenter(tasks, el) :super(tasks, el, newTaskTemplate);
 
-  get events() => {
+  get events => {
     "click button": _addNewTask
   };
 

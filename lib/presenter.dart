@@ -5,7 +5,7 @@ class Presenter<T> {
   final Template<T> template;
   final T model;
 
-  Map get events() => {};
+  Map get events => {};
   
   Presenter(this.model, this.el, [this.template]){
     subscribeToModelEvents();

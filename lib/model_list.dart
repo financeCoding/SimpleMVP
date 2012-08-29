@@ -10,7 +10,7 @@ class ModelList<T> {
     storage = new Storage({"readAll" : rootUrl});
   }
 
-  abstract String get rootUrl();
+  abstract String get rootUrl;
   
   abstract T makeInstance(Map attrs, ModelList list);
   

@@ -28,10 +28,10 @@ class EventMap {
 }
 
 class CollectionEvents extends EventMap {
-  Listeners get load() => listeners("load");
-  Listeners get insert() => listeners("insert");
-  Listeners get remove() => listeners("remove");
-  Listeners get update() => listeners("update");
+  Listeners get load => listeners("load");
+  Listeners get insert => listeners("insert");
+  Listeners get remove => listeners("remove");
+  Listeners get update => listeners("update");
 }
 
 class CollectionLoadEvent {
@@ -53,7 +53,7 @@ class CollectionRemoveEvent {
 }
 
 class ModelEvents extends EventMap {
-  Listeners get change() => listeners("change");
+  Listeners get change => listeners("change");
 }
 
 class ChangeEvent {

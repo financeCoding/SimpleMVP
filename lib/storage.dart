@@ -3,18 +3,19 @@ class Storage {
 
   Storage(this._urls);
 
-  Future<List> readAll() => _submit("GET", _urls["readAll"], {});
+  Future<List> readAll() => _submit("GET", _urls["readAll"], json: {});
 
-  Future<Map> read(id) => _submit("GET", _urls["read"], {"id" : id});
+  Future<Map> read(id) => _submit("GET", _urls["read"], id: id);
 
-  Future<Map> create(Map attrs) => _submit("POST", _urls["create"], attrs);
+  Future<Map> create(Map attrs) => _submit("POST", _urls["create"], json: attrs);
 
-  Future<Map> update(Map attrs) => _submit("PUT", _urls["update"], attrs);
+  Future<Map> update(id, Map attrs) => _submit("PUT", _urls["update"], id: id, json: attrs);
 
-  Future<Map> destroy(id) => _submit("DELETE", _urls["destroy"], {"id" : id});
+  Future<Map> destroy(id) => _submit("DELETE", _urls["destroy"], id: id);
 
-  _submit(method, url, json){
+  _submit(method, url, [id, json]){
     var c = new Completer();
+    url = id != null ? "$url/$id" : url;
     var req = _createRequest(method, url, (res) => c.complete(res));
     req.send(JSON.stringify(json));
     return c.future;
