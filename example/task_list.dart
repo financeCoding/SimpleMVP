@@ -1,14 +1,13 @@
 #import('dart:html');
-#import("../simple_mvc.dart", prefix: "smvc");
+#import('../simple_mvp.dart', prefix: "smvp");
 
-class Tasks extends smvc.ModelList<Task>{
+class Tasks extends smvp.ModelList<Task>{
   final rootUrl = "/api/tasks";
-  makeInstance(attrs, tasks) => new Task(attrs, tasks);
 }
 
-class Task extends smvc.Model {
-  Task(attrs, models): super(attrs, models);
-  Task.withText(String text): this({"text": text}, null);
+class Task extends smvp.Model {
+  Task(attrs, modelList): super(attrs, modelList);
+  Task.fromText(String text): this({"text": text}, null);
   
   final rootUrl = "/api/task";
   final createUrl = "/api/tasks";
@@ -35,7 +34,7 @@ taskListTemplate(c) => """
 
 
 
-class TaskPresenter extends smvc.Presenter<Task> {
+class TaskPresenter extends smvp.Presenter<Task> {
   TaskPresenter(task, el) : super(task, el, oneTaskTemplate);
 
   get events => {
@@ -47,7 +46,7 @@ class TaskPresenter extends smvc.Presenter<Task> {
   }
 }
 
-class NewTaskPresenter extends smvc.Presenter<Tasks> {
+class NewTaskPresenter extends smvp.Presenter<Tasks> {
   NewTaskPresenter(tasks, el) :super(tasks, el, newTaskTemplate);
 
   get events => {
@@ -61,17 +60,17 @@ class NewTaskPresenter extends smvc.Presenter<Tasks> {
   }
 
   _createTask(text){
-    var task = new Task.withText(text);
+    var task = new Task.fromText(text);
     model.add(task);
     task.save();
   }
 }
 
-class TasksPresenter extends smvc.Presenter<Tasks>{
+class TasksPresenter extends smvp.Presenter<Tasks>{
   TasksPresenter(tasks, el) : super(tasks, el, taskListTemplate){
     model.fetch();
   }
- 
+
   subscribeToModelEvents(){
     model.on.load.add(_rerenderTasks);
     model.on.insert.add(_rerenderTasks);

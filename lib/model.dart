@@ -11,11 +11,11 @@ class Model {
         "update" : updateUrl, "destroy" : destroyUrl});
   }
   
-  abstract String get rootUrl();
+  abstract String get rootUrl;
   String get createUrl => rootUrl;
   String get updateUrl => rootUrl;
   String get destroyUrl => rootUrl;
-  
+
   get id => attributes["id"];
   
   bool isSaved() => id != null;

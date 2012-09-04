@@ -1,4 +1,4 @@
-class ModelList<T> {
+class ModelList<T extends Model> {
   final CollectionEvents on;
   List<T> models;
   Storage storage;
@@ -12,13 +12,13 @@ class ModelList<T> {
 
   abstract String get rootUrl;
   
-  abstract T makeInstance(Map attrs, ModelList list);
+  T makeInstance(Map attrs, ModelList list) => new T(attrs, list);
   
   forEach(fn(T)) => models.forEach(fn);
 
   map(fn(T)) => models.map(fn);
   
-  void add(model){
+  void add(T model){
     models.add(model);
     model.modelList = this;
     on.insert.dispatch(new CollectionInsertEvent(this, model));
