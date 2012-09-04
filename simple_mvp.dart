@@ -1,4 +1,4 @@
-#library("simple_mvc");
+#library('simple_mvp.dart');
 
 #import("dart:html");
 #import("dart:json");
