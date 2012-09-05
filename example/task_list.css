@@ -15,5 +15,6 @@ span.done-true {
 }
 
 input.task-text {
+  width: 400px;
   margin-bottom: 0px;
 }
