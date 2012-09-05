@@ -3,22 +3,37 @@
 
 class Tasks extends smvp.ModelList<Task>{
   final rootUrl = "/api/tasks";
+
+  makeInstance(attrs, list) => new Task(attrs, list);
 }
 
 class Task extends smvp.Model {
   Task(attrs, modelList): super(attrs, modelList);
-  Task.fromText(String text): this({"text": text}, null);
+  Task.fromText(String text): this({"text": text, "status": "inProgress"}, null);
   
   final rootUrl = "/api/task";
   final createUrl = "/api/tasks";
+
+  get isCompleted => status == "completed";
+
+  complete(){
+    status = "completed";
+    save();
+  }
+
+  inProgress(){
+    status = "inProgress";
+    save();
+  }
 }
 
 
 
 
 oneTaskTemplate(c) => """
-  ${c.text}
-  <a class="delete" href="#">[X]</a>
+  <span class="text">${c.text}</span>
+  <a class="complete" href="#">[DONE]</a>
+  <a class="delete" href="#">[DELETE]</a>
 """;
 
 newTaskTemplate(c) => """
@@ -37,13 +52,22 @@ taskListTemplate(c) => """
 class TaskPresenter extends smvp.Presenter<Task> {
   TaskPresenter(task, el) : super(task, el, oneTaskTemplate);
 
+  subscribeToModelEvents() {
+    model.on.change.add(_onChange);
+  }
+
+  _onChange(e){
+    render();
+    el.query(".text").classes.add("done-${model.isCompleted}");
+  }
+
   get events => {
-    "click a.delete": _onDelete
+    "click a.delete": _onDelete,
+    "click a.complete": _onComplete
   };
 
-  _onDelete(event){
-    model.destroy();
-  }
+  _onDelete(event) => model.destroy();
+  _onComplete(event) => model.isCompleted ? model.inProgress() : model.complete();
 }
 
 class NewTaskPresenter extends smvp.Presenter<Tasks> {

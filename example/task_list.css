@@ -19,3 +19,7 @@ body {
 li {
   padding: 5px;
 }
+
+.done-true {
+  text-decoration: line-through;
+}

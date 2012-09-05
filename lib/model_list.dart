@@ -12,7 +12,7 @@ class ModelList<T extends Model> {
 
   abstract String get rootUrl;
   
-  T makeInstance(Map attrs, ModelList list) => new T(attrs, list);
+  abstract T makeInstance(Map attrs, ModelList list);
   
   forEach(fn(T)) => models.forEach(fn);
 

@@ -31,8 +31,8 @@ class RequestHandler {
       _renderNewRecord();
 
     } else if (uri.startsWith("/api/task")){
-      _render("text/json", "");
-          
+      _renderUpdatedRecord();
+
     } else if (uri.endsWith(".dart")) {
       _renderDartFile();
         
@@ -57,6 +57,15 @@ class RequestHandler {
       _render("text/json", JSON.stringify(map));
     };    
   }
+
+  _renderUpdatedRecord(){
+    var s = new StringInputStream(request.inputStream);
+    s.onData = (){
+      var data = s.read();
+      print("body: ${data}");
+      _render("text/json", data);
+    };
+  }
   
   _renderDartFile(){
     var uri = request.uri;
@@ -80,7 +89,7 @@ class RequestHandler {
   }
 
   _items() {
-    var r = [{"id": 1, "text": "Task 1"}, {"id": 2, "text": "Task 2"}];
+    var r = [{"id": 1, "text": "Task 1", "status" : "inProgress"}, {"id": 2, "text": "Task 2", "status" : "inProgress"}];
     return JSON.stringify(r);
   }
 }
