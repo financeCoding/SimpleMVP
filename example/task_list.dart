@@ -31,19 +31,25 @@ class Task extends smvp.Model {
 
 
 oneTaskTemplate(c) => """
+<div class="well well-small">
   <span class="text">${c.text}</span>
-  <a class="complete" href="#">[DONE]</a>
-  <a class="delete" href="#">[DELETE]</a>
+  <span class="actions">
+    <a class="complete" href="#">[DONE]</a>
+    <a class="delete" href="#">[DELETE]</a>
+  </span>
+</div>
 """;
 
 newTaskTemplate(c) => """
-   <input type="text" class="task-text"/>
-   <button>Create!</button>
+<div class="well well-small">
+  <input type="text" class="task-text"/>
+  <button class="btn">Create!</button>
+</div>
 """;
 
 taskListTemplate(c) => """
-    <div id="tasks">
-    </div>
+<div id="tasks">
+</div>
 """;
 
 
@@ -74,19 +80,28 @@ class NewTaskPresenter extends smvp.Presenter<Tasks> {
   NewTaskPresenter(tasks, el) :super(tasks, el, newTaskTemplate);
 
   get events => {
-    "click button": _addNewTask
+    "click button": _addNewTask,
+    "keypress input": _maybeAddNewTask
   };
 
-  _addNewTask(event){
-    var textField = el.query(".task-text");
-    _createTask(textField.value);
-    textField.value = "";
+  _maybeAddNewTask(event){
+    if(event.keyIdentifier == "Enter"){
+      _createTask();
+    }
   }
 
-  _createTask(text){
-    var task = new Task.fromText(text);
+  _addNewTask(event){
+    _createTask();
+  }
+
+  _createTask(){
+    var textField = el.query(".task-text");
+
+    var task = new Task.fromText(textField.value);
     model.add(task);
     task.save();
+
+    textField.value = "";
   }
 }
 
