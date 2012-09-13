@@ -22,7 +22,7 @@ class Storage {
   }
 
   _createRequest(method, url, callback){
-    var req = new XMLHttpRequest();
+    var req = new HttpRequest();
 
     req.on.load.add((e){
       String response = req.response;
